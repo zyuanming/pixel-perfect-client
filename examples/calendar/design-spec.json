@@ -1,0 +1,140 @@
+{
+  "version": "0.1.0",
+  "source": {
+    "type": "imagegen",
+    "identifier": "example-calendar-reference.png",
+    "pixelWidth": 941,
+    "pixelHeight": 1672,
+    "density": null,
+    "notes": "Example only. Measurements are illustrative, not a canonical reconstruction."
+  },
+  "target": {
+    "product": "Example Calendar",
+    "platform": "iOS",
+    "uiFramework": "UIKit or SwiftUI",
+    "device": null,
+    "orientation": "portrait",
+    "logicalWidth": null,
+    "logicalHeight": null,
+    "scale": null,
+    "locale": "zh-Hans",
+    "theme": "light",
+    "state": "calendar-day-selected"
+  },
+  "canvas": {
+    "width": 941,
+    "height": 1672,
+    "coordinateSpace": "source-pixels",
+    "background": "#F4F0E8",
+    "safeArea": {
+      "top": 0,
+      "left": 0,
+      "bottom": 0,
+      "right": 0
+    }
+  },
+  "tokens": {
+    "colors": {
+      "text.primary": "#242422",
+      "accent.red": "#B5392F",
+      "surface.warm": "#F4F0E8"
+    },
+    "spacing": {
+      "page": 42,
+      "section": 28
+    },
+    "radius": {
+      "card": 24
+    },
+    "typography": {}
+  },
+  "assets": [
+    {
+      "id": "hero.moon",
+      "kind": "raster",
+      "source": "reference crop or regenerated dedicated asset",
+      "output": "assets/moon.webp",
+      "contentMode": "fit",
+      "confidence": "medium",
+      "notes": "Do not approximate the crater texture with ordinary UI shapes."
+    },
+    {
+      "id": "footer.ink-landscape",
+      "kind": "raster",
+      "source": "reference crop or regenerated dedicated asset",
+      "output": "assets/ink-landscape.webp",
+      "contentMode": "fill",
+      "confidence": "medium",
+      "notes": "Decorative art asset, separate from navigation UI."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "screen",
+      "type": "container",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 941,
+        "height": 1672
+      },
+      "background": "#F4F0E8",
+      "renderer": "native",
+      "confidence": "high",
+      "notes": "Root application content.",
+      "children": [
+        {
+          "id": "hero.primary-date",
+          "type": "text",
+          "frame": {
+            "x": 48,
+            "y": 352,
+            "width": 430,
+            "height": 120
+          },
+          "text": "9月23日",
+          "typography": {
+            "family": null,
+            "fallback": "serif",
+            "size": 86,
+            "weight": "medium",
+            "lineHeight": 104,
+            "letterSpacing": -2,
+            "alignment": "leading",
+            "confidence": "low"
+          },
+          "color": "#242422",
+          "renderer": "native",
+          "confidence": "medium",
+          "notes": "Exact generated-image font may not exist as a real typeface.",
+          "children": []
+        },
+        {
+          "id": "hero.moon",
+          "type": "image",
+          "frame": {
+            "x": 553,
+            "y": 319,
+            "width": 278,
+            "height": 292
+          },
+          "assetId": "hero.moon",
+          "renderer": "asset",
+          "confidence": "medium",
+          "notes": "",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "ambiguities": [
+    {
+      "subject": "hero.primary-date.font",
+      "confidence": "low",
+      "note": "The rasterized ImageGen glyphs may not map to one real font."
+    }
+  ],
+  "metadata": {
+    "example": true
+  }
+}
