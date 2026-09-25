@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zyuanming/pixel-perfect-client/schemas/design-spec.schema.json",
+  "title": "Pixel Perfect Client Design Spec",
+  "type": "object",
+  "required": ["version", "source", "target", "canvas", "nodes"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^0\\.[0-9]+\\.[0-9]+$"
+    },
+    "source": {
+      "type": "object",
+      "required": ["type", "identifier", "pixelWidth", "pixelHeight"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["image", "screenshot", "imagegen", "figma", "golden", "other"]
+        },
+        "identifier": {"type": "string", "minLength": 1},
+        "pixelWidth": {"type": "integer", "minimum": 1},
+        "pixelHeight": {"type": "integer", "minimum": 1},
+        "density": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "required": ["platform", "uiFramework"],
+      "properties": {
+        "product": {"type": "string"},
+        "platform": {
+          "type": "string",
+          "enum": [
+            "iOS", "iPadOS", "macOS", "watchOS", "visionOS",
+            "Android", "Flutter", "ReactNative", "KotlinMultiplatform",
+            "ComposeMultiplatform", "Web", "Desktop", "Other"
+          ]
+        },
+        "uiFramework": {"type": "string", "minLength": 1},
+        "device": {"type": ["string", "null"]},
+        "orientation": {
+          "type": ["string", "null"],
+          "enum": ["portrait", "landscape", null]
+        },
+        "logicalWidth": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "logicalHeight": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "scale": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "locale": {"type": ["string", "null"]},
+        "theme": {"type": ["string", "null"]},
+        "state": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "canvas": {
+      "type": "object",
+      "required": ["width", "height"],
+      "properties": {
+        "width": {"type": "number", "exclusiveMinimum": 0},
+        "height": {"type": "number", "exclusiveMinimum": 0},
+        "coordinateSpace": {
+          "type": "string",
+          "enum": ["source-pixels", "logical-points", "normalized"]
+        },
+        "background": {"$ref": "#/$defs/color"},
+        "safeArea": {"$ref": "#/$defs/insets"}
+      },
+      "additionalProperties": false
+    },
+    "tokens": {
+      "type": "object",
+      "properties": {
+        "colors": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/color"}
+        },
+        "spacing": {
+          "type": "object",
+          "additionalProperties": {"type": "number"}
+        },
+        "radius": {
+          "type": "object",
+          "additionalProperties": {"type": "number", "minimum": 0}
+        },
+        "typography": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/typography"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/asset"},
+      "default": []
+    },
+    "nodes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/node"},
+      "minItems": 1
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["subject", "confidence", "note"],
+        "properties": {
+          "subject": {"type": "string"},
+          "confidence": {"$ref": "#/$defs/confidence"},
+          "note": {"type": "string"}
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"]
+    },
+    "rect": {
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": {"type": "number"},
+        "y": {"type": "number"},
+        "width": {"type": "number", "minimum": 0},
+        "height": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "insets": {
+      "type": "object",
+      "required": ["top", "left", "bottom", "right"],
+      "properties": {
+        "top": {"type": "number"},
+        "left": {"type": "number"},
+        "bottom": {"type": "number"},
+        "right": {"type": "number"}
+      },
+      "additionalProperties": false
+    },
+    "color": {
+      "type": ["string", "object"],
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$"
+        },
+        {
+          "type": "object",
+          "required": ["r", "g", "b"],
+          "properties": {
+            "r": {"type": "number", "minimum": 0, "maximum": 1},
+            "g": {"type": "number", "minimum": 0, "maximum": 1},
+            "b": {"type": "number", "minimum": 0, "maximum": 1},
+            "a": {"type": "number", "minimum": 0, "maximum": 1, "default": 1}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "typography": {
+      "type": "object",
+      "required": ["size"],
+      "properties": {
+        "family": {"type": ["string", "null"]},
+        "fallback": {"type": ["string", "null"]},
+        "size": {"type": "number", "exclusiveMinimum": 0},
+        "weight": {"type": ["string", "number", "null"]},
+        "lineHeight": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "letterSpacing": {"type": ["number", "null"]},
+        "alignment": {
+          "type": ["string", "null"],
+          "enum": ["leading", "center", "trailing", "justified", null]
+        },
+        "confidence": {"$ref": "#/$defs/confidence"}
+      },
+      "additionalProperties": false
+    },
+    "asset": {
+      "type": "object",
+      "required": ["id", "kind", "source"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {
+          "type": "string",
+          "enum": [
+            "supplied", "system-icon", "product-icon", "raster",
+            "vector", "generated", "procedural", "3d"
+          ]
+        },
+        "source": {"type": "string"},
+        "output": {"type": ["string", "null"]},
+        "contentMode": {
+          "type": ["string", "null"],
+          "enum": ["fit", "fill", "stretch", "center", null]
+        },
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "type", "frame"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "type": {
+          "type": "string",
+          "enum": [
+            "container", "text", "image", "icon", "control",
+            "separator", "shape", "procedural", "system"
+          ]
+        },
+        "frame": {"$ref": "#/$defs/rect"},
+        "zIndex": {"type": "number"},
+        "text": {"type": ["string", "null"]},
+        "typography": {"$ref": "#/$defs/typography"},
+        "color": {"$ref": "#/$defs/color"},
+        "background": {"$ref": "#/$defs/color"},
+        "cornerRadius": {"type": ["number", "null"], "minimum": 0},
+        "assetId": {"type": ["string", "null"]},
+        "nativeRole": {"type": ["string", "null"]},
+        "renderer": {
+          "type": ["string", "null"],
+          "enum": [
+            "native", "asset", "vector", "canvas", "core-image",
+            "shader", "metal", "3d", "offline-3d", null
+          ]
+        },
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "notes": {"type": "string"},
+        "children": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/node"},
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
