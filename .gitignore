@@ -1,0 +1,9 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+
+# Local pixel-perfect work products
+.pixel-perfect/captures/
+.pixel-perfect/reports/
+.pixel-perfect/assets/
